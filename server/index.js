@@ -1,21 +1,22 @@
 // TECHNOS //
-const express = require('express')
- HTTP = require('http'),
- cors = require('cors'),
- axios = require("axios"),
- bodyParser = require('body-parser'),
- CryptoJS = require("crypto-js");
+const express = require('express'),
+  HTTP = require('http'),
+  cors = require('cors'),
+  axios = require("axios"),
+  bodyParser = require('body-parser'),
+  CryptoJS = require("crypto-js");
 
-
+// ORM //
+var ORM = require("./database/connection")
 
 // Routes //
-var usersRoutes = require('./routes/users');
+var logsRoutes = require('./routes/logs');
 
 // Instance et creation de serveur //
-const app = express();
-const server = HTTP.createServer(app);
-const PORT = process.env.PORT || 5000;
-const API_URL = "http://localhost:5000/";
+const app = express(),
+  server = HTTP.createServer(app),
+  PORT = process.env.PORT || 5000,
+  API_URL = "http://localhost:5000/";
 
 // CORS //
 app.use(function(req, res, next) {
@@ -37,10 +38,13 @@ app.use(bodyParser.json())
 	app.get('/', (req,res) => {
 		res.send("Welcome")
 	})
-	// Users //
-	app.use('/users', usersRoutes)
+	// Logs //
+	app.use('/logs', logsRoutes)
 
 
 // LISTENING //
 app.use(cors());
-server.listen(PORT, () => console.log(`Le serveur de --Warkeep_BACKEND-- est UP ! PORT : ${PORT} ; ADRESSE : ${API_URL}`));
+server.listen(PORT, () => {
+	ORM.TryConnection();
+	console.log(`Le serveur de -- APPNAME -- est UP ! PORT : ${PORT} ; ADRESSE : ${API_URL}`)}
+	);
